@@ -1,6 +1,6 @@
 <template>
     <div id="calculator-view" class="w-auto h-screen bg-slate-800 grid grid-cols-4 gap-4 text-white p-4 text-4xl">
-        <input v-model="display" class="col-span-4 text-slate-800 text-right text-7xl" type="number" name="input" id="input">
+        <input v-model="display" class="col-span-4 text-slate-800 text-right text-7xl" type="text" name="input" id="input">
         <button v-on:click="calculate('AC')" class="col-auto bg-slate-700">AC</button>
         <button v-on:click="calculate('-+')" class="bg-slate-700">+/-</button>
         <button v-on:click="calculate('%')" class="bg-slate-700">%</button>
@@ -18,7 +18,7 @@
         <button v-on:click="numberButton(3)" class="bg-slate-600">3</button>
         <button v-on:click="calculate('+')" class="bg-yellow-500">+</button>
         <button v-on:click="numberButton(0)" class="col-span-2 bg-slate-600">0</button>
-        <button class="bg-slate-600">,</button>
+        <button v-on:click="dot" class="bg-slate-600">.</button>
         <button v-on:click="equal" class="bg-yellow-500">=</button>
     </div>
 </template>
@@ -31,8 +31,7 @@ export default {
             input: 0,
             input2: 0,
             action: null,
-            display: 0,
-            isPressed : false,
+            display: '0',
         }
     },
     methods: {
@@ -42,14 +41,21 @@ export default {
                 this.display = this.input;
                 return;
             }
-            this.input = this.input.toString().concat(x.toString());
+
+            this.input = this.display.toString().concat(x.toString());
+            
             this.display = this.input;
+
+        },
+        dot: function(){
+            console.log(this.display);
+            if (!this.display.toString().includes('.')) {
+                this.input = this.display.toString().concat('.');
+                this.display = this.input;
+            }      
+            console.log(this.display);
         },
         calculate(x){
-            if (this.action == x && this.isPressed) {
-                return;
-            }
-
             if (this.action == '/') {
                 this.display = this.input2 / this.input;
             } else  if (this.action == 'x') {
